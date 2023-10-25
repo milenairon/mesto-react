@@ -1,0 +1,12 @@
+/*Блок*/
+.header {
+  border-bottom: 1px solid rgba(54, 54, 54, 0.7);
+  padding-bottom: 41px;
+  width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    padding-bottom: 32px;
+  }
+}
