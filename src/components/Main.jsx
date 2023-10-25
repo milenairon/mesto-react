@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import profileImageInfo from "../images/profile-button-info.svg";
 import profileImageAdd from "../images/profile-button-add.svg";
-import api from "../utils/Api.jsx";
-import Card from "./Card.jsx";
+import api from "../utils/Api";
+import Card from "./Card";
 
 function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
   const [userName, setUserName] = useState("");
@@ -75,7 +75,9 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
       <section className="elements">
         <ul className="element">
           {cards.map((card) => {
-            return <Card card={card} key={card._id} onCardClick={onCardClick}/>;
+            return (
+              <Card card={card} key={card._id} onCardClick={onCardClick} />
+            );
           })}
         </ul>
       </section>
