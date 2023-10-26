@@ -12,6 +12,9 @@ export default function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
+  const isSomePopupOpen = document.querySelector(".popup_opened")
+    ? "true"
+    : "false";
 
   //открыть попапы
   function openPopupEdit() {
@@ -28,11 +31,11 @@ export default function App() {
     setSelectedCard(card);
   }
   //закрытие на темный фон
-  function handleOverlayClose(event) {
+  const handleOverlayClose = React.useCallback((event) => {
     if (event.target.classList.contains("popup")) {
       closeAllPopups();
     }
-  }
+  }, []);
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
@@ -41,20 +44,22 @@ export default function App() {
   }
 
   //ЗАКРЫТИЕ НА ESC
-  const escFunction = React.useCallback((event) => {
+  const handleCloseByEsc = React.useCallback((event) => {
     if (event.key === "Escape") {
       closeAllPopups();
     }
   }, []);
 
   React.useEffect(() => {
-    document.addEventListener("keydown", escFunction);
-    document.addEventListener("click", handleOverlayClose);
-    return () => {
-      document.removeEventListener("keydown", escFunction);
-      document.removeEventListener("click", handleOverlayClose);
-    };
-  }, [escFunction, handleOverlayClose]);
+    if (isSomePopupOpen) {
+      document.addEventListener("keydown", handleCloseByEsc);
+      document.addEventListener("click", handleOverlayClose);
+      return () => {
+        document.removeEventListener("keydown", handleCloseByEsc);
+        document.removeEventListener("click", handleOverlayClose);
+      };
+    }
+  }, [isSomePopupOpen]);
 
   return (
     <div className="app">
@@ -70,7 +75,8 @@ export default function App() {
         <PopupWithForm
           name="edit"
           title="Редактировать профиль"
-          isOpen={!isEditProfilePopupOpen ? "" : "popup_opened"}
+          buttonText="Сохранить"
+          isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
         >
           <label className="popup__field">
@@ -97,19 +103,13 @@ export default function App() {
             />
             <span className="popup__input-error-message job-input-error-message"></span>
           </label>
-          <button
-            aria-label="Сохранить"
-            className="popup__button"
-            type="submit"
-          >
-            Сохранить
-          </button>
         </PopupWithForm>
         <PopupWithForm
           name="add"
           title="Новое место"
-          isOpen={!isAddPlacePopupOpen ? "" : "popup_opened"}
+          isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
+          buttonText="Создать"
         >
           <label className="popup__field">
             <input
@@ -133,14 +133,12 @@ export default function App() {
             />
             <span className="popup__input-error-message link-input-error-message"></span>
           </label>
-          <button aria-label="Создать" className="popup__button" type="submit">
-            Создать
-          </button>
         </PopupWithForm>
         <PopupWithForm
           name="update-avatar"
           title="Обновить аватар"
-          isOpen={!isEditAvatarPopupOpen ? "" : "popup_opened"}
+          buttonText="Сохранить"
+          isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
         >
           <label className="popup__field">
@@ -153,19 +151,12 @@ export default function App() {
             />
             <span className="popup__input-error-message link-input-error-message"></span>
           </label>
-          <button
-            aria-label="Сохранить"
-            className="popup__button"
-            type="submit"
-          >
-            Сохранить
-          </button>
         </PopupWithForm>
-        <PopupWithForm name="card-delete" title="Вы уверены?">
-          <button aria-label="Да" className="popup__button" type="button">
-            Да
-          </button>
-        </PopupWithForm>
+        <PopupWithForm
+          name="card-delete"
+          title="Вы уверены?"
+          buttonText="Да"
+        ></PopupWithForm>
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
     </div>

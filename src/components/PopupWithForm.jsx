@@ -2,7 +2,11 @@ import popupCloseIcon from "../images/close-icon.svg";
 
 export default function PopupWithForm(props) {
   return (
-    <div className={`popup popup_place_${props.name} ${props.isOpen}`}>
+    <div
+      className={`popup popup_place_${props.name} ${
+        !props.isOpen ? "" : "popup_opened"
+      }`}
+    >
       <div className={`popup__container popup__container_place_${props.name}`}>
         <button
           aria-label="Закрыть"
@@ -22,6 +26,13 @@ export default function PopupWithForm(props) {
           className={`popup__form popup__form_type_${props.name}`}
         >
           {props.children}
+          <button
+            aria-label={props.buttonText}
+            className="popup__button"
+            type="submit"
+          >
+            {props.buttonText}
+          </button>
         </form>
       </div>
     </div>

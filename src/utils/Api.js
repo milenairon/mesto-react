@@ -3,7 +3,7 @@ class Api {
     this._url = url;
     this._headers = headers;
   }
-  _getRequest(url, options) {
+  _sendRequest(url, options) {
     return fetch(url, options).then((res) => {
       if (res.ok) {
         return res.json();
@@ -15,7 +15,7 @@ class Api {
 
   //Получить данные профиля
   getProfile() {
-    return this._getRequest(`${this._url}/users/me`, {
+    return this._sendRequest(`${this._url}/users/me`, {
       method: "GET",
       headers: this._headers,
     });
@@ -23,7 +23,7 @@ class Api {
 
   //Редактирование профиля
   editProfile(name, job) {
-    return this._getRequest(`${this._url}/users/me`, {
+    return this._sendRequest(`${this._url}/users/me`, {
       //Метод PATCH обычно используют для обновления уже существующей инфы
       method: "PATCH",
       headers: this._headers,
@@ -35,15 +35,15 @@ class Api {
   }
   //Получить все карточки
   getAllCards() {
-    return this._getRequest(`${this._url}/cards`, {
+    return this._sendRequest(`${this._url}/cards`, {
       method: "GET",
       headers: this._headers,
     });
   }
 
   //Создать новую карточку
-  createnewCard(data) {
-    return this._getRequest(`${this._url}/cards`, {
+  createNewCard(data) {
+    return this._sendRequest(`${this._url}/cards`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify(data),
@@ -52,7 +52,7 @@ class Api {
 
   //Удалить карточку
   deleteCard(id) {
-    return this._getRequest(`${this._url}/cards/${id}`, {
+    return this._sendRequest(`${this._url}/cards/${id}`, {
       method: "DELETE",
       headers: this._headers,
     });
@@ -61,7 +61,7 @@ class Api {
   //добавить/удалить лайк
   changeLike(isLiked, id) {
     const method = !isLiked ? "PUT" : "DELETE";
-    return this._getRequest(`${this._url}/cards/${id}/likes`, {
+    return this._sendRequest(`${this._url}/cards/${id}/likes`, {
       method: method,
       headers: this._headers,
     });
@@ -69,7 +69,7 @@ class Api {
 
   //Обновить аватар
   updateAvatar(avatar) {
-    return this._getRequest(`${this._url}/users/me/avatar`, {
+    return this._sendRequest(`${this._url}/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify(avatar),

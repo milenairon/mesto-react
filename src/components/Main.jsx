@@ -10,23 +10,12 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
   const [userAvatar, setUserAvatar] = useState("");
   const [cards, setСards] = useState([]);
   useEffect(() => {
-    api
-      .getProfile() //Получить мои данные
-      .then((user) => {
+    Promise.all([api.getProfile(), api.getAllCards()])
+      .then(([user, cardList]) => {
         setUserName(user.name);
         setUserDescription(user.about);
         setUserAvatar(user.avatar);
-      })
-      .then(() => {
-        api
-          .getAllCards() //Получить все карточки
-          .then((cardList) => {
-            setСards(cardList);
-          })
-          .catch((error) => {
-            //если запрос не ушел
-            console.log(error);
-          });
+        setСards(cardList);
       })
       .catch((error) => {
         //если запрос не ушел
