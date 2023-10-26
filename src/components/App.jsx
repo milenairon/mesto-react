@@ -12,9 +12,11 @@ export default function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
-  const isSomePopupOpen = document.querySelector(".popup_opened")
-    ? "true"
-    : "false";
+  const isSomePopupOpen =
+    isEditProfilePopupOpen ||
+    isAddPlacePopupOpen ||
+    isEditAvatarPopupOpen ||
+    selectedCard;
 
   //открыть попапы
   function openPopupEdit() {
