@@ -94,7 +94,7 @@
 ```
 Api.js:
 
-getProfile() {
+getUserInfo() {
     return (
       fetch(`https://nomoreparties.co/v1/cohortId/users/me `, {
       method: "GET",
@@ -119,7 +119,7 @@ getProfile() {
 index.js:
 
 api
-.getProfile() //Получить мои данные
+.getUserInfo() //Получить мои данные
 .then((user) => {
   userInfoElement.setUserInfo(user);
 })

@@ -14,7 +14,7 @@ class Api {
   }
 
   //Получить данные профиля
-  getProfile() {
+  getUserInfo() {
     return this._sendRequest(`${this._url}/users/me`, {
       method: "GET",
       headers: this._headers,

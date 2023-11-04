@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
+import React from "react";
 import profileImageInfo from "../images/profile-button-info.svg";
 import profileImageAdd from "../images/profile-button-add.svg";
 import api from "../utils/Api";
 import Card from "./Card";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
-function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
-  const [userName, setUserName] = useState("");
-  const [userDescription, setUserDescription] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");
+function Main({ onEditProfile, onAddPlace, onEditAvatar , onCardClick }) {
+  //данные меня
+  const currentUser = React.useContext(CurrentUserContext);
+  //все карточки с сервера
   const [cards, setСards] = useState([]);
+ 
+  //вставляем карточки с сервера
   useEffect(() => {
-    Promise.all([api.getProfile(), api.getAllCards()])
-      .then(([user, cardList]) => {
-        setUserName(user.name);
-        setUserDescription(user.about);
-        setUserAvatar(user.avatar);
-        setСards(cardList);
-      })
-      .catch((error) => {
-        //если запрос не ушел
-        console.log(error);
-      });
-  }, []);
+  api.getAllCards() //Получить все карточки
+  .then((cardList) => {
+    setСards(cardList);
+  })
+  .catch((error) => {//если запрос не ушел
+    console.log(error);
+  })}, []);
+
   return (
     <main className="content">
       <section className="profile">
@@ -30,10 +30,14 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
           className="profile__button-avatar"
           type="button"
           onClick={onEditAvatar}
-          style={{ backgroundImage: `url(${userAvatar})` }}
+          style={{
+            backgroundImage: `url(${currentUser ? currentUser.avatar : ""})`,
+          }}
         ></button>
         <div className="profile__info">
-          <h1 className="profile__title">{userName}</h1>
+          <h1 className="profile__title">
+            {currentUser ? currentUser.name : ""}
+          </h1>
           <button
             aria-label="Редактировать"
             type="button"
@@ -46,7 +50,9 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
               alt="редактирование формы"
             />
           </button>
-          <p className="profile__subtitle">{userDescription}</p>
+          <p className="profile__subtitle">
+            {currentUser ? currentUser.about : ""}
+          </p>
         </div>
         <button
           aria-label="Добавить картинку"
@@ -63,7 +69,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
       </section>
       <section className="elements">
         <ul className="element">
-          {cards.map((card) => {
+        {cards.map((card) => {
             return (
               <Card card={card} key={card._id} onCardClick={onCardClick} />
             );

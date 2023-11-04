@@ -4,6 +4,8 @@ import Main from "./Main.jsx";
 import Footer from "./Footer.jsx";
 import PopupWithForm from "./PopupWithForm.jsx";
 import ImagePopup from "./ImagePopup.jsx";
+import api from "../utils/Api";
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 export default function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -12,6 +14,7 @@ export default function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
+  const [currentUser, setCurrentUser] = React.useState(null);//мб внутри поставить null или ""?
   const isSomePopupOpen =
     isEditProfilePopupOpen ||
     isAddPlacePopupOpen ||
@@ -52,6 +55,7 @@ export default function App() {
     }
   }, []);
 
+  //закрытие попапа на темный фон и esc
   React.useEffect(() => {
     if (isSomePopupOpen) {
       document.addEventListener("keydown", handleCloseByEsc);
@@ -63,8 +67,21 @@ export default function App() {
     }
   }, [isSomePopupOpen]);
 
+  //данные
+  React.useEffect(() => {
+    api.getUserInfo()
+      .then((user) => {
+        setCurrentUser(user);
+      })
+      .catch((error) => {
+        //если запрос не ушел
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div className="app">
+      <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header />
         <Main
@@ -161,6 +178,7 @@ export default function App() {
         ></PopupWithForm>
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
+      </CurrentUserContext.Provider>
     </div>
   );
 }
