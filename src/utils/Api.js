@@ -22,7 +22,7 @@ class Api {
   }
 
   //Редактирование профиля
-  editProfile(name, job) {
+  setUserInfo({name, job}) {
     return this._sendRequest(`${this._url}/users/me`, {
       //Метод PATCH обычно используют для обновления уже существующей инфы
       method: "PATCH",
@@ -59,7 +59,7 @@ class Api {
   }
 
   //добавить/удалить лайк
-  changeLike(isLiked, id) {
+  changeLike(id, isLiked) {
     const method = !isLiked ? "PUT" : "DELETE";
     return this._sendRequest(`${this._url}/cards/${id}/likes`, {
       method: method,

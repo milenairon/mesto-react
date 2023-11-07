@@ -1,12 +1,12 @@
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
-import api from "../utils/Api.js";
+
 
 //картинки в popup-ах
 import elementImageDelete from "../images/element-button-urn.svg";
 import elementImageLike from "../images/element-image-like.svg";
 
-function Card({ card, onCardClick }) {
+function Card({ card, onCardClick, onCardLike, onCardDelete }) {
   //данные меня
   const currentUser = React.useContext(CurrentUserContext);
 
@@ -15,8 +15,6 @@ function Card({ card, onCardClick }) {
   const isOwn = card.owner._id === currentUser._id;
 
   // Определяем, есть ли у карточки лайк, поставленный мной
-  //some позволяет проверить соответствует ли по крайней мере один...
-  //...элемент в массиве условию
   const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
   // Создаём переменную, которую после зададим в `className` для кнопки лайка
@@ -26,19 +24,14 @@ function Card({ card, onCardClick }) {
 
   //удалить карточку
   function handleDeleteClick() {
-    card.remove();
-    card = null;
-  }
-  //поставить лайк
-  function handleCardLike() {
-    // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLike(!isLiked, card._id).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    });
+  onCardDelete(card)
   }
 
+  //поставить лайк
+  function handleLikeClick() {
+    onCardLike(card);
+};
+  
   //открытие попапа с картинкой
   function handleClick() {
     onCardClick(card);
@@ -77,7 +70,7 @@ function Card({ card, onCardClick }) {
               className={cardLikeButtonClassName}
               src={elementImageLike}
               alt="лайк"
-              onClick={handleCardLike}
+              onClick={handleLikeClick}
             />
           </button>
           <p className="element__like-lot">{card.likes.length}</p>

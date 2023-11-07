@@ -1,26 +1,20 @@
-import { useEffect, useState } from "react";
 import React from "react";
 import profileImageInfo from "../images/profile-button-info.svg";
 import profileImageAdd from "../images/profile-button-add.svg";
-import api from "../utils/Api";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
-function Main({ onEditProfile, onAddPlace, onEditAvatar , onCardClick }) {
+function Main({
+  cards,
+  onEditProfile,
+  onAddPlace,
+  onEditAvatar,
+  onCardClick,
+  onCardLike,
+  onCardDelete,
+}) {
   //данные меня
   const currentUser = React.useContext(CurrentUserContext);
-  //все карточки с сервера
-  const [cards, setСards] = useState([]);
- 
-  //вставляем карточки с сервера
-  useEffect(() => {
-  api.getAllCards() //Получить все карточки
-  .then((cardList) => {
-    setСards(cardList);
-  })
-  .catch((error) => {//если запрос не ушел
-    console.log(error);
-  })}, []);
 
   return (
     <main className="content">
@@ -69,9 +63,15 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar , onCardClick }) {
       </section>
       <section className="elements">
         <ul className="element">
-        {cards.map((card) => {
+          {cards.map((card) => {
             return (
-              <Card card={card} key={card._id} onCardClick={onCardClick} />
+              <Card
+                card={card}
+                key={card._id}
+                onCardClick={onCardClick}
+                onCardLike={onCardLike}
+                onCardDelete={onCardDelete}
+              />
             );
           })}
         </ul>

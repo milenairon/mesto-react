@@ -121,7 +121,7 @@ index.js:
 api
 .getUserInfo() //Получить мои данные
 .then((user) => {
-  userInfoElement.setUserInfo(user);
+  userInfoElement.editProfile(user);
 })
 
 ```
