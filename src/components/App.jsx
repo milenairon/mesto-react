@@ -8,6 +8,7 @@ import api from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import EditProfilePopup from "./EditProfilePopup.jsx";
 import EditAvatarPopup from "./EditAvatarPopup.jsx";
+import AddPlacePopup from "./AddPlacePopup.jsx";
 
 export default function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -16,7 +17,7 @@ export default function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
-  const [currentUser, setCurrentUser] = React.useState(null); //мб внутри поставить null или ""?
+  const [currentUser, setCurrentUser] = React.useState(null);
   const isSomePopupOpen =
     isEditProfilePopupOpen ||
     isAddPlacePopupOpen ||
@@ -83,10 +84,9 @@ export default function App() {
     // Отправляем запрос в API и получаем обновлённые данные массива карточек
     api
       .deleteCard(card._id)
-      .then((newCards) => {
-        setCards(() =>
-          //мб тут так? then(() => {setCards((state) =>...
-          newCards.filter((c) => c._id === card._id)
+      .then(() => {
+        setCards((state) =>
+          state.filter((c) => c._id === card._id)
         );
       })
       .catch((error) => {
@@ -123,6 +123,20 @@ export default function App() {
       });
   }
 
+  //добавить новую карточку
+  function handleAddPlaceSubmit({ name, link }) {
+    api
+      .createNewCard({ name, link })
+      .then((newCard) => {
+        setCards([newCard, ...cards])
+        closeAllPopups();
+      })
+      .catch((error) => {
+        //если запрос не ушел
+        console.log(error);
+      });
+  }
+
   //закрытие попапа на темный фон и esc
   React.useEffect(() => {
     if (isSomePopupOpen) {
@@ -135,7 +149,7 @@ export default function App() {
     }
   }, [isSomePopupOpen]);
 
-  //данные
+  //данные пользователя
   React.useEffect(() => {
     api
       .getUserInfo()
@@ -186,36 +200,11 @@ export default function App() {
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
           />
-          <PopupWithForm
-            name="add"
-            title="Новое место"
+          <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
-            buttonText="Создать"
-          >
-            <label className="popup__field">
-              <input
-                className="popup__name popup__input"
-                type="text"
-                placeholder="Название"
-                name="name"
-                minLength="2"
-                maxLength="30"
-                required
-              />
-              <span className="popup__input-error-message name-input-error-message"></span>
-            </label>
-            <label className="popup__field">
-              <input
-                className="popup__link popup__input"
-                type="url"
-                placeholder="Ссылка на картинку"
-                name="link"
-                required
-              />
-              <span className="popup__input-error-message link-input-error-message"></span>
-            </label>
-          </PopupWithForm>
+            onAddPlace={handleAddPlaceSubmit}
+          />
           <PopupWithForm
             name="card-delete"
             title="Вы уверены?"
