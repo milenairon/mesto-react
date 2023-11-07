@@ -9,9 +9,9 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  background-size: 100%;
+  background-size: cover;
   background-repeat: no-repeat;
-  
+  background-position: center;
 }
 
 .profile__button-avatar::after {
