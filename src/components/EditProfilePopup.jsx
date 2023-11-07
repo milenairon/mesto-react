@@ -24,7 +24,6 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       name,
       about: description,
     });
-    //onClose()
   }
 
   React.useEffect(() => {

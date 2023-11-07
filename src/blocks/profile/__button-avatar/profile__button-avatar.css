@@ -10,6 +10,8 @@
   border-radius: 50%;
   object-fit: cover;
   background-size: 100%;
+  background-repeat: no-repeat;
+  
 }
 
 .profile__button-avatar::after {

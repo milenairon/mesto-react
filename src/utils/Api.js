@@ -22,7 +22,7 @@ class Api {
   }
 
   //Редактирование профиля
-  setUserInfo({name, job}) {
+  setUserInfo({ name, job }) {
     return this._sendRequest(`${this._url}/users/me`, {
       //Метод PATCH обычно используют для обновления уже существующей инфы
       method: "PATCH",
@@ -68,7 +68,7 @@ class Api {
   }
 
   //Обновить аватар
-  updateAvatar(avatar) {
+  setUserAvatar(avatar) {
     return this._sendRequest(`${this._url}/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,

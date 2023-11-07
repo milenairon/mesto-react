@@ -7,6 +7,7 @@ import ImagePopup from "./ImagePopup.jsx";
 import api from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import EditProfilePopup from "./EditProfilePopup.jsx";
+import EditAvatarPopup from "./EditAvatarPopup.jsx";
 
 export default function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
@@ -95,9 +96,23 @@ export default function App() {
   }
 
   //вставить данные из формы
-  function handleUpdateUser({name, about}) {
+  function handleUpdateUser({ name, about }) {
     api
-      .setUserInfo({name, job: about})
+      .setUserInfo({ name, job: about })
+      .then((user) => {
+        setCurrentUser(user);
+        closeAllPopups();
+      })
+      .catch((error) => {
+        //если запрос не ушел
+        console.log(error);
+      });
+  }
+
+  //поменять картинку аватара
+  function handleUpdateAvatar(avatar) {
+    api
+      .setUserAvatar(avatar)
       .then((user) => {
         setCurrentUser(user);
         closeAllPopups();
@@ -166,6 +181,11 @@ export default function App() {
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
           />
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
           <PopupWithForm
             name="add"
             title="Новое место"
@@ -190,24 +210,6 @@ export default function App() {
                 className="popup__link popup__input"
                 type="url"
                 placeholder="Ссылка на картинку"
-                name="link"
-                required
-              />
-              <span className="popup__input-error-message link-input-error-message"></span>
-            </label>
-          </PopupWithForm>
-          <PopupWithForm
-            name="update-avatar"
-            title="Обновить аватар"
-            buttonText="Сохранить"
-            isOpen={isEditAvatarPopupOpen}
-            onClose={closeAllPopups}
-          >
-            <label className="popup__field">
-              <input
-                className="popup__link popup__input"
-                type="url"
-                placeholder="Ссылка на аватар"
                 name="link"
                 required
               />
