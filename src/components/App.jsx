@@ -85,9 +85,7 @@ export default function App() {
     api
       .deleteCard(card._id)
       .then(() => {
-        setCards((state) =>
-          state.filter((c) => c._id === card._id)
-        );
+        setCards((cardList) => cardList.filter((c) => c._id !== card._id));
       })
       .catch((error) => {
         //если запрос не ушел
@@ -128,7 +126,7 @@ export default function App() {
     api
       .createNewCard({ name, link })
       .then((newCard) => {
-        setCards([newCard, ...cards])
+        setCards([newCard, ...cards]);
         closeAllPopups();
       })
       .catch((error) => {
