@@ -1,7 +1,6 @@
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
-
 //картинки в popup-ах
 import elementImageDelete from "../images/element-button-urn.svg";
 import elementImageLike from "../images/element-image-like.svg";
@@ -24,14 +23,14 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
 
   //удалить карточку
   function handleDeleteClick() {
-  onCardDelete(card)
+    onCardDelete(card);
   }
 
   //поставить лайк
   function handleLikeClick() {
     onCardLike(card);
-};
-  
+  }
+
   //открытие попапа с картинкой
   function handleClick() {
     onCardClick(card);
