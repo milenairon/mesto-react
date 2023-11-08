@@ -2,9 +2,7 @@ import popupCloseIcon from "../images/close-icon.svg";
 
 export default function ImagePopup({ card, onClose }) {
   return (
-    <div
-      className={`popup popup_place_image ${!card ? "" : "popup_opened"}`}
-    >
+    <div className={`popup popup_place_image ${!card ? "" : "popup_opened"}`}>
       <div className="popup__container popup__container_place_image">
         <button
           aria-label="Закрыть"
